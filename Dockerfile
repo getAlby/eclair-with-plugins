@@ -26,3 +26,9 @@ RUN cd eclair && git checkout v0.8.0 && mvn install -DskipTests=true && cd ..
 # Install plugins
 RUN curl -L https://github.com/evd0kim/eclair-alarmbot-plugin/archive/refs/tags/v0.8.0.zip --output eclair-alarmbot-plugin-0.8.0.zip
 RUN unzip eclair-alarmbot-plugin-0.8.0.zip && cd eclair-alarmbot-plugin-0.8.0&& mvn install && cd ..
+
+FROM ghcr.io/getalby/eclair:keysend-no-payment-secret-4d0c2b6
+RUN mkdir /plugins
+COPY --from=BUILD /root/.m2/repository/fr/acinq/alarmbot/eclair-alarmbot_2.13/0.8.0/eclair-alarmbot_2.13-0.8.0.jar /plugins/eclair-alarmbot_2.13-0.8.0.jar
+
+ENTRYPOINT JAVA_OPTS="${JAVA_OPTS}" eclair-node/bin/eclair-node.sh "-Declair.datadir=${ECLAIR_DATADIR}" /plugins/eclair-alarmbot_2.13-0.8.0.jar
