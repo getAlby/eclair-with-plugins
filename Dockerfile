@@ -24,11 +24,11 @@ RUN git clone https://github.com/ACINQ/eclair.git
 RUN cd eclair && git checkout v0.8.0 && mvn install -DskipTests=true && cd ..
 
 # Install plugins
-RUN curl -L https://github.com/getAlby/eclair-rabbitmq/archive/refs/tags/v0.0.1.zip --output eclair-rabbitmq-0.0.1.zip
-RUN unzip eclair-rabbitmq-0.0.1.zip && cd eclair-rabbitmq-0.0.1 && mvn install && cd ..
+RUN curl -L https://github.com/getAlby/eclair-plugins/archive/refs/tags/v0.0.1.zip --output eclair-plugins-0.0.1.zip
+RUN unzip eclair-plugins-0.0.1.zip && cd eclair-plugins-0.0.1 && mvn install && cd ..
 
 FROM acinq/eclair:release-0.8.0
 RUN mkdir /plugins
-COPY --from=BUILD /root/.m2/repository/com/getalby/eclair/rabbitmq/rabbitmqplugin/0.8.0/rabbitmqplugin-0.8.0.jar /plugins/rabbitmqplugin-0.8.0.jar
+COPY --from=BUILD /root/.m2/repository/com/getalby/eclair/eclair-rabbitmq/0.8.0/rabbitmqplugin-0.8.0.jar /plugins/rabbitmqplugin-0.8.0.jar
 
 ENTRYPOINT JAVA_OPTS="${JAVA_OPTS}" eclair-node/bin/eclair-node.sh "-Declair.datadir=${ECLAIR_DATADIR}" /plugins/rabbitmqplugin-0.8.0.jar
