@@ -24,8 +24,8 @@ RUN git clone https://github.com/ACINQ/eclair.git
 RUN cd eclair && git checkout v0.8.0 && mvn install -DskipTests=true && cd ..
 
 # Install plugins
-RUN curl -L https://github.com/getAlby/eclair-plugins/archive/refs/tags/v0.0.1.zip --output eclair-plugins-0.0.1.zip
-RUN unzip eclair-plugins-0.0.1.zip && cd eclair-plugins-0.0.1 && mvn install && cd ..
+RUN curl -L https://github.com/getAlby/eclair-plugins/archive/refs/tags/v0.0.3.zip --output eclair-plugins-0.0.3.zip
+RUN unzip eclair-plugins-0.0.3.zip && cd eclair-plugins-0.0.3 && mvn install && cd ..
 
 FROM acinq/eclair:release-0.8.0
 RUN mkdir /plugins
